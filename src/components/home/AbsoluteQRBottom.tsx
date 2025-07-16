@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 import {bottomTabStyles} from '../../styles/bottomTabStyle';
 import {navigate} from '../../utils/NavigationUtil';
 import Icon from '../global/Icon';
+import QRScannerModal from '../modals/QRScannerModal';
 
 const AbsoluteQRBottom = () => {
   const [isVisible, setVisible] = useState(false);
@@ -25,6 +26,9 @@ const AbsoluteQRBottom = () => {
       <TouchableOpacity>
         <Icon name="beer-sharp" iconFamily="Ionicons" color="#333" size={24} />
       </TouchableOpacity>
+      {isVisible && (
+        <QRScannerModal visible={isVisible} onClose={() => setVisible(false)} />
+      )}
     </View>
   );
 };
