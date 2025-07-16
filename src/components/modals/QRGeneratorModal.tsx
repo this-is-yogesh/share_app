@@ -30,13 +30,21 @@ const QRGeneratorModal: FC<ModalProps> = ({visible, onClose}) => {
     transform: [{translateX: shimmerTranslateX.value}],
   }));
 
+  // useEffect(() => {
+  //   if (visible) {
+  //     setLoading(true);
+  //     const timer = setTimeout(() => setLoading(false), 400);
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [visible]);
+
   useEffect(() => {
     shimmerTranslateX.value = withRepeat(
       withTiming(300, {duration: 1500, easing: Easing.linear}),
       -1,
       false,
     );
-  }, [visible]);
+  }, [visible, shimmerTranslateX]);
   const [loading, setLoading] = useState(true);
   const [qrValue, setQrValue] = useState('Dheeraj');
   return (
