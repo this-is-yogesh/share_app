@@ -19,6 +19,10 @@ import Animated, {
 } from 'react-native-reanimated';
 import {multiColor} from '../../utils/Constants';
 import Icon from '../global/Icon';
+import {useTCP} from '../../service/TCPProvider';
+import DeviceInfo from 'react-native-device-info';
+import {getLocalIPAddress} from '../../utils/networkUtils';
+import {navigate} from '../../utils/NavigationUtil';
 
 interface ModalProps {
   visible: boolean;
@@ -30,13 +34,19 @@ const QRGeneratorModal: FC<ModalProps> = ({visible, onClose}) => {
     transform: [{translateX: shimmerTranslateX.value}],
   }));
 
-  // useEffect(() => {
-  //   if (visible) {
-  //     setLoading(true);
-  //     const timer = setTimeout(() => setLoading(false), 400);
-  //     return () => clearTimeout(timer);
-  //   }
-  // }, [visible]);
+  const {isConnected, startServer, server} = useTCP();
+
+  const setupServer = async () => {
+    const deviceName = await DeviceInfo.getDeviceName();
+    const ip = await getLocalIPAddress();
+    const port = 4000;
+    if (!server) {
+      startServer(port);
+    }
+
+    setQrValue(`tcp://${ip}:${port}|${deviceName}`);
+    console.log(`Server info:${ip} :${port} `);
+  };
 
   useEffect(() => {
     shimmerTranslateX.value = withRepeat(
@@ -44,9 +54,21 @@ const QRGeneratorModal: FC<ModalProps> = ({visible, onClose}) => {
       -1,
       false,
     );
+    if (visible) {
+      setLoading(true);
+      setupServer();
+    }
   }, [visible, shimmerTranslateX]);
   const [loading, setLoading] = useState(true);
   const [qrValue, setQrValue] = useState('Dheeraj');
+
+  useEffect(() => {
+    console.log('TCPProvider: isConnected updated to', isConnected);
+    if (isConnected) {
+      onClose();
+      navigate('ConnectionScreen');
+    }
+  }, [isConnected]);
   return (
     <Modal
       visible={visible}

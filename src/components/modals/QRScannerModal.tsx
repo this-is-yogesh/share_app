@@ -18,6 +18,7 @@ import Animated, {
   Easing,
 } from 'react-native-reanimated';
 import Icon from '../global/Icon';
+import {useTCP} from '../../service/TCPProvider';
 // import {useCameraDevice, Camera, CodeScanner} from 'react-native-vision-camera';
 import DeviceInfo from 'react-native-device-info';
 
@@ -38,10 +39,12 @@ const QRScannerModal: FC<ModalProps> = ({visible, onClose}) => {
     transform: [{translateX: shimmerTranslateX.value}],
   }));
 
+  const {connectToServer, isConnected} = useTCP();
+
   useEffect(() => {
     const checkCameraPermission = async () => {
       // const cameraPermission = await Camera.requestCameraPermission();
-     // setHasPermission(cameraPermission === 'granted');
+      // setHasPermission(cameraPermission === 'granted');
     };
     checkCameraPermission();
     if (visible) {
@@ -62,7 +65,7 @@ const QRScannerModal: FC<ModalProps> = ({visible, onClose}) => {
     const [connectionData, deviceName] = data.replace('tcp://', '').split('|');
     const [host, port] = connectionData?.split(':');
 
-    // connectToServer(host, port);
+    connectToServer(host, parseInt(port, 10), deviceName);
   };
 
   // const codeScanner = useMemo<CodeScanner>(
