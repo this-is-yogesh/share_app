@@ -7,22 +7,25 @@ import HomeScreen from '../screens/HomeScreen';
 import SplashScreen from '../screens/SplashScreen';
 import SendScreen from '../screens/SendScreen';
 import ReceiveScreen from '../screens/ReceiveScreen';
+import { TCPProvider } from '../service/TCPProvider';
 
 const Stack = createNativeStackNavigator();
 const Navigation: FC = () => {
   return (
-    <NavigationContainer ref={navigationRef}>
-      <Stack.Navigator
-        initialRouteName="SplashScreen"
-        screenOptions={{headerShown: false}}>
-        <Stack.Screen name="ConnectionScreen" component={ConnectionScreen} />
-        <Stack.Screen name="HomeScreen" component={HomeScreen} />
-        <Stack.Screen name="SplashScreen" component={SplashScreen} />
-  
-        <Stack.Screen name="SendScreen" component={SendScreen} />
-        <Stack.Screen name="ReceiveScreen" component={ReceiveScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <TCPProvider>
+      <NavigationContainer ref={navigationRef}>
+        <Stack.Navigator
+          initialRouteName="SplashScreen"
+          screenOptions={{headerShown: false}}>
+          <Stack.Screen name="ConnectionScreen" component={ConnectionScreen} />
+          <Stack.Screen name="HomeScreen" component={HomeScreen} />
+          <Stack.Screen name="SplashScreen" component={SplashScreen} />
+
+          <Stack.Screen name="SendScreen" component={SendScreen} />
+          <Stack.Screen name="ReceiveScreen" component={ReceiveScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </TCPProvider>
   );
 };
 
